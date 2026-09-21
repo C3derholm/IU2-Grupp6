@@ -1,0 +1,26 @@
+## .NET
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+project.lock.json
+artifacts/
+
+## Verktyg
+.vs/
+.vscode/
+.idea/
+*.swp
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Hemligheter - lägg ALDRIG riktiga nycklar i repot
+appsettings.Development.json
+appsettings.Local.json
+*.env

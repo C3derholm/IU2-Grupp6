@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>IU2.Core</RootNamespace>
+  </PropertyGroup>
+
+</Project>

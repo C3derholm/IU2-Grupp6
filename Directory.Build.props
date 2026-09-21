@@ -1,0 +1,17 @@
+<Project>
+
+  <!-- Gäller alla projekt i mappträdet. Ändra version på ETT ställe. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Diskutera i sprint 0: ska varningar stoppa bygget?
+         Slår ni på den här raden blir er Definition of Done skarpare -
+         och er första vecka jobbigare. Valet är ert, men motivera det.
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    -->
+  </PropertyGroup>
+
+</Project>

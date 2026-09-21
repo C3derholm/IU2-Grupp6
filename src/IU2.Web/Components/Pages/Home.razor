@@ -1,0 +1,17 @@
+@page "/"
+@inject IClock Clock
+
+<h1>Startmallen fungerar</h1>
+
+<p>
+    Bygget är grönt och appen kör. Servertid just nu:
+    <strong>@Clock.Now.ToString("yyyy-MM-dd HH:mm")</strong>
+</p>
+
+<p>
+    Den här sidan finns bara för att visa att kedjan hänger ihop:
+    <code>IU2.Core</code> → <code>IU2.Web</code> → webbläsaren, och
+    <code>IU2.Core.Tests</code> → CI.
+</p>
+
+<p><em>Ta bort sidan när ni har något eget att visa.</em></p>
