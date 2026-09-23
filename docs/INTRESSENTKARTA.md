@@ -6,18 +6,18 @@
 
 | Lager | Vem | Vad de behöver av oss | Vad vi behöver av dem |
 |---|---|---|---|
-| Core |  |  |  |
-| Primary |  |  |  |
-| Secondary |  |  |  |
+| Core | Beställaren |  |  |
+| Primary | Teknikern, IT-support, |  |  |
+| Secondary | Användaren, förvaltningsteamet |  |  |
 
 ## Intressentkartan
 
 | Område | Intressent | Intresse i projektet | Makt över projektet |
 |---|---|---|---|
-| Samhälle |  |  |  |
-| Marknad |  |  |  |
-| Medarbetare |  |  |  |
-| Investerare |  |  |  |
+| Samhälle | Ingen tydlig central intressent | Begränsat | Låg |
+| Marknad | Intern verskamhet | Vill ha snabb fungerande IT-support | Vill ha snabb och fungerande IT-support | Medel
+| Medarbetare | Användaren, Teknikern, Projektteamet | Användaren vill rapportera enkelt, teknikern vill kunna hantera ärenden effektivt, teamet vill leverera fungerande lösning | Medel-Hög |
+| Investerare | Beställaren | Vill ha struktur, statistik, uppföljning och kontroll | Hög |
 
 ## Beställaren och användaren
 
