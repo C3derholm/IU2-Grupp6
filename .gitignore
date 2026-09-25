@@ -9,6 +9,7 @@ obj/
 *.sln.docstates
 project.lock.json
 artifacts/
+*.db
 
 ## Verktyg
 .vs/
