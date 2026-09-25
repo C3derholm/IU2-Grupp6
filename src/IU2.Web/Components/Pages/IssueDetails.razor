@@ -1,3 +1,52 @@
-@page "/issues/{Id:int}"
+@page "/issue/{Id:int}"
+@rendermode InteractiveServer
 
-<h3>Issue Details</h3>
+@using IU2.Core.Models
+@inject IU2.Core.Services.IIssueService IssueService
+
+<h3>Felanmälan</h3>
+
+@if (issue == null)
+{
+    <p>Ärendet hittades inte.</p>
+}
+else
+{
+    <p>
+        <strong>Ärendenummer:</strong>
+        @issue.Id
+    </p>
+
+    <p>
+        <strong>Rubrik:</strong>
+        @issue.Title
+    </p>
+
+    <p>
+        <strong>Beskrivning:</strong>
+        @issue.Description
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        @issue.Status
+    </p>
+
+    <p>
+        <strong>Skapad:</strong>
+        @issue.CreatedAt
+    </p>
+}
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private Issue? issue;
+
+    protected override async Task OnInitializedAsync()
+    {
+        issue = await IssueService.GetByIdAsync(Id);
+    }
+}
