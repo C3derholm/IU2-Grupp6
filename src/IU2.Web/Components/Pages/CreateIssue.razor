@@ -1,5 +1,8 @@
 @page "/create-issue"
+@using IU2.Core.Services
+@using IU2.Core.Models
 @rendermode InteractiveServer
+@inject IIssueService IssueService
 
 <div style="min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; display: flex; align-items: center; justify-content: center;">
     <div style="background: white; border-radius: 12px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); padding: 40px; width: 100%; max-width: 600px;">
@@ -82,8 +85,14 @@
     {
         try
         {
-            // TODO: Injicera IssueService här och anropa:
-            // await _issueService.CreateIssueAsync(newIssue);
+            var issue = new Issue
+            {
+                Title = newIssue.Title,
+                Description = newIssue.Description,
+                Category = Enum.Parse<IssueCategory>(newIssue.Category)
+            };
+
+            await IssueService.CreateAsync(issue);
 
             successMessage = "Issue sparades framgångsrikt!";
             errorMessage = string.Empty;
