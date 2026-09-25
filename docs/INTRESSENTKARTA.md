@@ -6,9 +6,9 @@
 
 | Lager | Vem | Vad de behöver av oss | Vad vi behöver av dem |
 |---|---|---|---|
-| Core | Beställaren |  |  |
-| Primary | Teknikern, IT-support, |  |  |
-| Secondary | Användaren, förvaltningsteamet |  |  |
+| Core | Beställaren | Ett system som ger struktur, kategorisering och möjlighet till uppföljning | Prioriteringar, krav och beslut om vad som är viktigast |
+| Primary | Teknikern, IT-support, | Tydliga felanmälningar, relevant information och möjlighet att se och uppdatera ärenden | Feedback på vad som behövs för att kunna hantera ärenden effektivt |
+| Secondary | Användaren, förvaltningsteamet | Ett enkelt och snabbt sätt att beskriva sitt problem och följa ärendet | Tydlig beskrivning av problemet och återkoppling på om formuläret är enkelt att använda |
 
 ## Intressentkartan
 
