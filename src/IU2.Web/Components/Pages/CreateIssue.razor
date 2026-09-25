@@ -1,3 +1,106 @@
 @page "/create-issue"
+@rendermode InteractiveServer
 
-<h3>Create Issue</h3>
+<div style="min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; display: flex; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 12px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); padding: 40px; width: 100%; max-width: 600px;">
+
+        <div style="margin-bottom: 30px;">
+            <h1 style="font-size: 32px; font-weight: 700; color: #1a1a1a; margin: 0 0 8px 0;">Skapa nytt Issue</h1>
+            <p style="color: #666; margin: 0; font-size: 14px;">Fyll i detaljer för det nya issue:t</p>
+        </div>
+
+        <EditForm Model="@newIssue" OnValidSubmit="@HandleSubmit">
+            <DataAnnotationsValidator />
+
+            <div style="margin-bottom: 20px;">
+                <label for="title" style="display: block; font-weight: 600; color: #333; margin-bottom: 8px; font-size: 14px;">Titel *</label>
+                <InputText id="title" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s;" @bind-Value="newIssue.Title" placeholder="Ex. Login fungerar inte..." />
+                <ValidationMessage For="@(() => newIssue.Title)" style="display: block; color: #e74c3c; font-size: 13px; margin-top: 4px;" />
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label for="category" style="display: block; font-weight: 600; color: #333; margin-bottom: 8px; font-size: 14px;">Kategori *</label>
+                <InputSelect id="category" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s;" @bind-Value="newIssue.Category">
+                    <option value="">-- Välj kategori --</option>
+                    @foreach (var category in Categories)
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => newIssue.Category)" style="display: block; color: #e74c3c; font-size: 13px; margin-top: 4px;" />
+            </div>
+
+            <div style="margin-bottom: 28px;">
+                <label for="description" style="display: block; font-weight: 600; color: #333; margin-bottom: 8px; font-size: 14px;">Beskrivning *</label>
+                <InputTextArea id="description" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 120px; transition: border-color 0.3s;" @bind-Value="newIssue.Description" placeholder="Beskiv problemet eller önskemålet i detalj..." rows="4" />
+                <ValidationMessage For="@(() => newIssue.Description)" style="display: block; color: #e74c3c; font-size: 13px; margin-top: 4px;" />
+            </div>
+
+            <div style="display: flex; gap: 12px;">
+                <button type="submit" style="flex: 1; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 20px rgba(102, 126, 234, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    ✓ Skapa Issue
+                </button>
+                <a href="/issues" style="padding: 12px 24px; background: #f0f0f0; color: #333; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; border: none; transition: background 0.2s; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.background='#e0e0e0'" onmouseout="this.style.background='#f0f0f0'">
+                    ← Tillbaka
+                </a>
+            </div>
+        </EditForm>
+
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div style="margin-top: 20px; padding: 16px; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 8px; font-size: 14px; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 20px;">✓</span>
+                @successMessage
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div style="margin-top: 20px; padding: 16px; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 8px; font-size: 14px; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 20px;">✕</span>
+                @errorMessage
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private IssueCreateModel newIssue = new();
+    private string successMessage = string.Empty;
+    private string errorMessage = string.Empty;
+
+    private readonly List<string> Categories = new()
+    {
+        "Bug",
+        "Feature",
+        "Enhancement",
+        "Documentation",
+        "Question"
+    };
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            // TODO: Injicera IssueService här och anropa:
+            // await _issueService.CreateIssueAsync(newIssue);
+
+            successMessage = "Issue sparades framgångsrikt!";
+            errorMessage = string.Empty;
+            newIssue = new();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Fel vid sparning: {ex.Message}";
+            successMessage = string.Empty;
+        }
+    }
+
+    private class IssueCreateModel
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+    }
+}
+
