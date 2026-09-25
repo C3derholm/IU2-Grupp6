@@ -1,3 +1,62 @@
 @page "/support"
+@rendermode InteractiveServer
 
-<h3>Support</h3>
+@using IU2.Core.Models
+@inject IU2.Core.Services.IssueService IssueService
+
+<h3>Inkomna felanmälningar</h3>
+
+@if (issues == null)
+{
+    <p>Laddar...</p>
+}
+else if (issues.Count == 0)
+{
+    <p>Det finns inga felanmälningar.</p>
+}
+else
+{
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Rubrik</th>
+                <th>Status</th>
+                <th>Skapad</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var issue in issues)
+            {
+                <tr>
+                    <td>@issue.Id</td>
+
+                    <td>
+                        <a href="/issue/@issue.Id">
+                            @issue.Title
+                        </a>
+                    </td>
+
+                    <td>@issue.Status</td>
+
+                    <td>@issue.CreatedAt</td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}
+
+@code {
+
+    private List<Issue>? issues;
+
+    protected override async Task OnInitializedAsync()
+    {
+        issues = await IssueService.GetAllAsync();
+    }
+}
