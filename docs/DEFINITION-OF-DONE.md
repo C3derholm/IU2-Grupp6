@@ -9,11 +9,11 @@
 
 En story är klar när:
 
-- [ ] ...
-- [ ] ...
-- [ ] ...
-- [ ] ...
-- [ ] ...
+- [ ] Relevanta tester går grönt
+- [ ] Koden är granskad via pull request.
+- [ ] Koden Bygger utan fel.
+- [ ] Koden är pushad till Git
+- [ ] Acceptance Criteria för storyn är uppfyllda.
 
 ## Vad vi medvetet INTE kräver
 
