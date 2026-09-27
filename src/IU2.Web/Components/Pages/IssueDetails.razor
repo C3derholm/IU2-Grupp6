@@ -27,10 +27,25 @@ else
         @issue.Description
     </p>
 
-    <p>
-        <strong>Status:</strong>
-        @issue.Status
-    </p>
+    <div class="mb-3">
+        <label for="status"><strong>Status:</strong></label>
+
+        <select id="status" class="form-select" @bind="valdStatus">
+            @foreach (var status in Enum.GetValues<IssueStatus>())
+            {
+                <option value="@status">@Etikett(status)</option>
+            }
+        </select>
+    </div>
+
+    <button class="btn btn-primary" @onclick="SaveStatus" disabled="@sparar">
+        Spara status
+    </button>
+
+    @if (meddelande != null)
+    {
+        <p class="@meddelandeKlass mt-2">@meddelande</p>
+    }
 
     <p>
         <strong>Skapad:</strong>
@@ -40,13 +55,56 @@ else
 
 @code {
 
+    private Issue? issue;
+    private IssueStatus valdStatus;
+    private bool sparar;
+    private string? meddelande;
+    private string meddelandeKlass = "text-success";
+
     [Parameter]
     public int Id { get; set; }
-
-    private Issue? issue;
 
     protected override async Task OnInitializedAsync()
     {
         issue = await IssueService.GetByIdAsync(Id);
+
+        if (issue != null)
+        {
+            valdStatus = issue.Status;
+        }
     }
+
+    private async Task SaveStatus()
+    {
+        if (issue == null) return;
+
+        sparar = true;
+        meddelande = null;
+
+        var sparades = await IssueService.UpdateStatusAsync(issue.Id, valdStatus);
+
+        if (sparades)
+        {
+            issue.Status = valdStatus;
+            meddelandeKlass = "text-success";
+            meddelande = $"Status sparad: {Etikett(valdStatus)}";
+        }
+        else
+        {
+            valdStatus = issue.Status;
+            meddelandeKlass = "text-danger";
+            meddelande = "Kunde inte spara. Ärendet finns inte längre.";
+        }
+
+        sparar = false;
+    }
+
+    private static string Etikett(IssueStatus status) => status switch
+    {
+        IssueStatus.New => "Nytt",
+        IssueStatus.InProgress => "Pågående",
+        IssueStatus.Done => "Klart",
+        _ => status.ToString()
+    };
+
 }
