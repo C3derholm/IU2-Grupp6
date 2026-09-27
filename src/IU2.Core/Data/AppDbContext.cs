@@ -15,5 +15,6 @@ public class AppDbContext : DbContext
     {
         modelBuilder.Entity<Issue>().Property(i => i.Status).HasConversion<string>();
         modelBuilder.Entity<Issue>().Property(i => i.Priority).HasConversion<string>();
+        modelBuilder.Entity<Issue>().Property(i => i.Category).HasConversion<string>();
     }
 }

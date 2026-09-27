@@ -16,7 +16,9 @@ artifacts/
 .vscode/
 .idea/
 *.swp
-
+*.db
+*.db-shm
+*.db-wal
 ## OS
 .DS_Store
 Thumbs.db
