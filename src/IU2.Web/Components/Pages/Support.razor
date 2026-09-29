@@ -16,12 +16,17 @@ else if (issues.Count == 0)
 }
 else
 {
+    @if (meddelande != null)
+    {
+        <p class="@meddelandeKlass">@meddelande</p>
+    }
     <table class="table">
 
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Rubrik</th>
+                <th>Kategori</th>
                 <th>Status</th>
                 <th>Skapad</th>
             </tr>
@@ -38,6 +43,16 @@ else
                         <a href="/issue/@issue.Id">
                             @issue.Title
                         </a>
+                    </td>
+
+                    <td>
+                        <select class="form-select form-select-sm" value="@issue.Category"
+                                @onchange="e => SparaKategori(issue, e)">
+                            @foreach (var kategori in Enum.GetValues<IssueCategory>())
+                            {
+                                <option value="@kategori">@kategori</option>
+                            }
+                        </select>
                     </td>
 
                     <td>@issue.Status.TillSvenska()</td>
@@ -58,5 +73,27 @@ else
     protected override async Task OnInitializedAsync()
     {
         issues = await IssueService.GetAllAsync();
+    }
+
+    private string? meddelande;
+    private string meddelandeKlass = "text-success";
+
+    private async Task SparaKategori(Issue issue, ChangeEventArgs e)
+    {
+        var nyKategori = Enum.Parse<IssueCategory>(e.Value!.ToString()!);
+
+        var sparades = await IssueService.UpdateCategoryAsync(issue.Id, nyKategori);
+
+        if (sparades)
+        {
+            issue.Category = nyKategori;
+            meddelandeKlass = "text-success";
+            meddelande = $"Kategori sparad för ärende {issue.Id}: {nyKategori}";
+        }
+        else
+        {
+            meddelandeKlass = "text-danger";
+            meddelande = $"Kunde inte spara. Ärende {issue.Id} finns inte längre.";
+        }
     }
 }
