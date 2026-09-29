@@ -5,6 +5,7 @@ namespace IU2.Core.Models;
 public enum IssueStatus { New, InProgress, Done }
 
 public enum IssuePriority { Low, Medium, High }
+
 public enum IssueCategory
 {
     Bug,
@@ -23,6 +24,10 @@ public class Issue
 
     [Required, MaxLength(2000)]
     public string Description { get; set; } = string.Empty;
+
+    [Required, MaxLength(50)]
+    public string Username { get; set; } = string.Empty;
+
     public IssueCategory Category { get; set; }
     public IssueStatus Status { get; set; } = IssueStatus.New;
 
