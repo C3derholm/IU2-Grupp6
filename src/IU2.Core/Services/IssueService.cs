@@ -90,4 +90,14 @@ public class IssueService : IIssueService
         .GroupBy(i => i.Category)
         .ToDictionaryAsync(g => g.Key, g => g.Count());
 }
+
+    public async Task<List<Issue>> GetCompletedAsync()
+    {
+        await using var db = await _factory.CreateDbContextAsync();
+        return await db.Issues
+            .AsNoTracking()
+            .Where(i => i.Status == IssueStatus.Done)
+            .OrderByDescending(i => i.CompletedAt)
+            .ToListAsync();
+    }
 }

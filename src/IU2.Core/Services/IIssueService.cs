@@ -11,4 +11,5 @@ public interface IIssueService
     Task<bool> UpdateStatusAsync(int id, IssueStatus status);
     Task<Dictionary<IssueCategory, int>> GetIssueCountByCategoryAsync();
     Task<bool> UpdateCategoryAsync(int id, IssueCategory category);
+    Task<List<Issue>> GetCompletedAsync();
 }

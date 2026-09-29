@@ -34,11 +34,93 @@ else
     </table>
 }
 
+<hr />
+
+<h4>Lösta felanmälningar</h4>
+
+@if (completedIssues == null)
+{
+    <p>Laddar...</p>
+}
+else if (completedIssues.Count == 0)
+{
+    <p>Det finns inga lösta felanmälningar.</p>
+}
+else
+{
+    <div>
+        <p><strong>Genomsnittlig lösningstid:</strong> @FormatAverageSolveTime()</p>
+    </div>
+
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Rubrik</th>
+                <th>Skapad</th>
+                <th>Löst</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var issue in completedIssues)
+            {
+                <tr>
+                    <td>@issue.Id</td>
+
+                    <td>
+                        <a href="/issue/@issue.Id">
+                            @issue.Title
+                        </a>
+                    </td>
+
+                    <td>@issue.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+
+                    <td>@(issue.CompletedAt?.ToString("yyyy-MM-dd HH:mm") ?? "-")</td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}
+
 @code {
     private Dictionary<IssueCategory, int>? categoryCounts;
+    private List<Issue>? completedIssues;
 
     protected override async Task OnInitializedAsync()
     {
         categoryCounts = await IssueService.GetIssueCountByCategoryAsync();
+        completedIssues = await IssueService.GetCompletedAsync();
+    }
+
+    private string FormatAverageSolveTime()
+    {
+        if (completedIssues == null || completedIssues.Count == 0)
+            return "N/A";
+
+        var validIssues = completedIssues.Where(i => i.CompletedAt.HasValue).ToList();
+        if (validIssues.Count == 0)
+            return "N/A";
+
+        var totalTimespan = validIssues.Sum(i => (i.CompletedAt.Value - i.CreatedAt).TotalHours);
+        var averageHours = totalTimespan / validIssues.Count;
+
+        if (averageHours < 1)
+        {
+            var minutes = averageHours * 60;
+            return $"{minutes:F0} minuter";
+        }
+
+        if (averageHours < 24)
+        {
+            return $"{averageHours:F1} timmar";
+        }
+
+        var days = averageHours / 24;
+        return $"{days:F1} dagar";
     }
 }
