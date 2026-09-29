@@ -1,0 +1,44 @@
+@page "/support-overview"
+@rendermode InteractiveServer
+
+@using IU2.Core.Models
+@inject IU2.Core.Services.IIssueService IssueService
+
+<h3>Översikt av felanmälningar</h3>
+
+@if (categoryCounts == null)
+{
+    <p>Laddar...</p>
+}
+else
+{
+    <h4>Felanmälningar per kategori</h4>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Kategori</th>
+                <th>Antal</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in categoryCounts)
+            {
+                <tr>
+                    <td>@item.Key</td>
+                    <td>@item.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Dictionary<IssueCategory, int>? categoryCounts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        categoryCounts = await IssueService.GetIssueCountByCategoryAsync();
+    }
+}
