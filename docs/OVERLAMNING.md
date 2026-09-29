@@ -1,33 +1,75 @@
 # Överlämningsnot
 
-> Två av demons tio minuter är överlämning. Skriv noten först, prata sedan
-> utifrån den. Tänk er ett team som tar över koden på måndag utan att ha
-> träffat er.
+## Översikt
+
+Ett internt felanmälningssystem för IT-support. Användare skickar in
+felanmälningar och följer sina ärenden. Supporten ser alla ärenden,
+kategoriserar dem och ändrar status (Nytt → Pågående → Löst).
+
+Byggt i Blazor (.NET 10) med SQLite som databas.
+
+| Sida | Vem | Vad |
+|---|---|---|
+| `/create-issue` | Användare | Skapa felanmälan |
+| `/my-issues` | Användare | Se sina egna ärenden (uppdateras var 10:e sekund) |
+| `/support` | Support | Se alla ärenden, ändra kategori |
+| `/issue/{id}` | Support | Se ett ärende, ändra status |
+| `/support-overview` | Support | Antal ärenden per kategori |
+
+## Nyckelpersoner
+
+| Namn | Ansvar | Kontakt |
+|---|---|---|
+| Andreas Cederholm | Story 7 (kategorisering), Story 8 (mina ärenden), statusändring | <...> |
+| Anna | Skapa felanmälan, användardropdown | <...> |
+| Luka | Projektskelett, databas, Username, kategoriöversikt (US9) | <...> |
+| Pierre | CompletedAt, automatisk migrering, startsida och meny | <...> |
 
 ## Var koden finns
 
-Repo:
-Gren som gäller:
+Repo: https://github.com/C3derholm/IU2-Grupp6
+Gren som gäller: `main`
 
 ## Hur man kör den
 
 ```
 dotnet restore
-dotnet run --project src/<ert projekt>
+dotnet run --project src/IU2.Web
 ```
 
-Förutsättningar (versioner, konton, konfiguration):
+Appen svarar på http://localhost:5080
+
+Förutsättningar:
+
+- .NET SDK 10 (kolla med `dotnet --list-sdks`)
+- Inga konton eller nycklar behövs
+- Databasen (`supportapp.db`) skapas och uppdateras automatiskt när appen
+  startar. Den ligger inte i Git – varje utvecklare har sin egen.
+- Det finns ingen inloggning. Användare väljs från en fast lista
+  (Anna Andersson, Bob Bergström m.fl.)
 
 ## Vad som är känt men inte åtgärdat
 
 | Vad | Hur allvarligt | Var i koden |
 |---|---|---|
-|  |  |  |
+| Ingen inloggning – vem som helst kan välja vilken användare som helst och se dennes ärenden, och nå supportsidorna | Hög | `CreateIssue.razor`, `MyIssues.razor`, `Support.razor` |
+| Säkerhetssårbarhet i paketet `SQLitePCLRaw.lib.e_sqlite3` 2.1.11 (följer med EF Core 10.0.0) | Hög | `src/IU2.Core/IU2.Core.csproj` |
+| Inga egna enhetstester – bara mallens två röktester | Medel | `tests/IU2.Core.Tests` |
+| `CompletedAt` nollställs inte när ett löst ärende öppnas igen | Låg | `IssueService.UpdateStatusAsync` |
+| Användarlistan finns på två ställen | Låg | `CreateIssue.razor`, `MyIssues.razor` |
+| Knappen "← Tillbaka" på skapa-sidan leder till `/issues` som inte finns | Låg | `CreateIssue.razor` |
+| Kategorierna (Bug, Feature …) passar ett utvecklingsprojekt snarare än IT-support | Låg | `Issue.cs` (`IssueCategory`) |
 
 ## Vad ett mottagande team bör ta först
 
-1.
-2.
-3.
+1. Uppdatera EF Core-paketen (10.0.0 → senaste 10.0.x) så att säkerhetsvarningen försvinner.
+2. Inför inloggning med roller (användare / support), så att användare bara når sina egna ärenden.
+3. Skriv enhetstester för `IssueService`.
 
 ## Vad vi skulle göra om vi fick en vecka till
+
+- Inloggning och roller
+- Filtrering och sortering på kategori och status i supportlistan
+- Kategorier anpassade för IT-support (Hårdvara, Mjukvara, Behörighet, Nätverk)
+- Push-notiser istället för att listan hämtas var 10:e sekund
+- Tester för all logik i `IssueService`
