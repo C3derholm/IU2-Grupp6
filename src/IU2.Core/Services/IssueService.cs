@@ -28,6 +28,16 @@ public class IssueService : IIssueService
         return await db.Issues.AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
     }
 
+    public async Task<List<Issue>> GetByUsernameAsync(string username)
+    {
+        await using var db = await _factory.CreateDbContextAsync();
+        return await db.Issues
+            .AsNoTracking()
+            .Where(i => i.Username == username)
+            .OrderByDescending(i => i.CreatedAt)
+            .ToListAsync();
+    }
+
     public async Task<Issue> CreateAsync(Issue issue)
     {
         await using var db = await _factory.CreateDbContextAsync();
