@@ -9,4 +9,5 @@ public interface IIssueService
     Task<Issue> CreateAsync(Issue issue);
     Task<List<Issue>> GetByUsernameAsync(string username);
     Task<bool> UpdateStatusAsync(int id, IssueStatus status);
+    Task<bool> UpdateCategoryAsync(int id, IssueCategory category);
 }
