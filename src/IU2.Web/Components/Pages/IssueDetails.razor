@@ -33,7 +33,7 @@ else
         <select id="status" class="form-select" @bind="valdStatus">
             @foreach (var status in Enum.GetValues<IssueStatus>())
             {
-                <option value="@status">@Etikett(status)</option>
+                <option value="@status">@status.TillSvenska()</option>
             }
         </select>
     </div>
@@ -87,7 +87,7 @@ else
         {
             issue.Status = valdStatus;
             meddelandeKlass = "text-success";
-            meddelande = $"Status sparad: {Etikett(valdStatus)}";
+            meddelande = $"Status sparad: {valdStatus.TillSvenska()}";
         }
         else
         {
@@ -98,13 +98,5 @@ else
 
         sparar = false;
     }
-
-    private static string Etikett(IssueStatus status) => status switch
-    {
-        IssueStatus.New => "Nytt",
-        IssueStatus.InProgress => "Pågående",
-        IssueStatus.Done => "Klart",
-        _ => status.ToString()
-    };
 
 }
