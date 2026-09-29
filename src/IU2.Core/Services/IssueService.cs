@@ -48,4 +48,13 @@ public class IssueService : IIssueService
         await db.SaveChangesAsync();
         return true;
     }
+    public async Task<Dictionary<IssueCategory, int>> GetIssueCountByCategoryAsync()
+{
+    await using var db = await _factory.CreateDbContextAsync();
+
+    return await db.Issues
+        .AsNoTracking()
+        .GroupBy(i => i.Category)
+        .ToDictionaryAsync(g => g.Key, g => g.Count());
+}
 }

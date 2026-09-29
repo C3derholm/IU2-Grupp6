@@ -8,4 +8,5 @@ public interface IIssueService
     Task<Issue?> GetByIdAsync(int id);
     Task<Issue> CreateAsync(Issue issue);
     Task<bool> UpdateStatusAsync(int id, IssueStatus status);
+    Task<Dictionary<IssueCategory, int>> GetIssueCountByCategoryAsync();
 }
