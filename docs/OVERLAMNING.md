@@ -20,9 +20,9 @@
 
   | Namn | Ansvar | Kontakt |
   |---|---|---|
-  | Andreas | Story 7 (kategorisering), Story 8 (mina ärenden), statusändring | <...> |
-  | Anna | Skapa felanmälan, användardropdown | <...> |
-  | Luka | Projektskelett, databas, Username, kategoriöversikt (US9) | <...> |
+  | Andreas | Kategorisering, mina ärenden, statusändring | <...> |
+  | Anna | Skapa felanmälan, användardropdown,databas | <...> |
+  | Luka | Projektskelett, databas, Username, kategoriöversikt | <...> |
   | Pierre | CompletedAt, automatisk migrering, startsida och meny | <...> |
 
   ## Var koden finns
