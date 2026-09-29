@@ -3,6 +3,7 @@
 
 @using IU2.Core.Models
 @inject IU2.Core.Services.IIssueService IssueService
+@implements IDisposable
 
 <h3>Mina felanmälningar</h3>
 
@@ -79,5 +80,29 @@ else
         }
 
         issues = await IssueService.GetByUsernameAsync(valdAnvandare);
+    }
+
+    private readonly PeriodicTimer timer = new(TimeSpan.FromSeconds(10));
+
+    protected override void OnInitialized()
+    {
+        _ = UppdateraRegelbundet();
+    }
+
+    private async Task UppdateraRegelbundet()
+    {
+        while (await timer.WaitForNextTickAsync())
+        {
+            await InvokeAsync(async () =>
+            {
+                await LaddaArenden();
+                StateHasChanged();
+            });
+        }
+    }
+
+    public void Dispose()
+    {
+        timer.Dispose();
     }
 }
