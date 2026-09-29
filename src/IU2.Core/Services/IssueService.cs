@@ -28,6 +28,16 @@ public class IssueService : IIssueService
         return await db.Issues.AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
     }
 
+    public async Task<List<Issue>> GetByUsernameAsync(string username)
+    {
+        await using var db = await _factory.CreateDbContextAsync();
+        return await db.Issues
+            .AsNoTracking()
+            .Where(i => i.Username == username)
+            .OrderByDescending(i => i.CreatedAt)
+            .ToListAsync();
+    }
+
     public async Task<Issue> CreateAsync(Issue issue)
     {
         await using var db = await _factory.CreateDbContextAsync();
@@ -38,6 +48,18 @@ public class IssueService : IIssueService
         return issue;
     }
 
+
+    public async Task<bool> UpdateCategoryAsync(int id, IssueCategory category)
+    {
+        await using var db = await _factory.CreateDbContextAsync();
+        var issue = await db.Issues.FindAsync(id);
+        if (issue is null) return false;
+
+        issue.Category = category;
+        await db.SaveChangesAsync();
+        return true;
+    }
+
     public async Task<bool> UpdateStatusAsync(int id, IssueStatus status)
     {
         await using var db = await _factory.CreateDbContextAsync();
@@ -45,6 +67,17 @@ public class IssueService : IIssueService
         if (issue is null) return false;
 
         issue.Status = status;
+
+        // Set CompletedAt when status changes to Done
+        if (status == IssueStatus.Done)
+        {
+            issue.CompletedAt = DateTime.UtcNow;
+        }
+        // Optionally, clear CompletedAt if status changes away from Done
+        else if (issue.Status == IssueStatus.Done)
+        {
+            issue.CompletedAt = null;
+        }
         await db.SaveChangesAsync();
         return true;
     }

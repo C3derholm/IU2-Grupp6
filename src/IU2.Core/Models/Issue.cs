@@ -34,4 +34,6 @@ public class Issue
     public IssuePriority Priority { get; set; } = IssuePriority.Medium;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public DateTime? CompletedAt { get; set;} 
 }

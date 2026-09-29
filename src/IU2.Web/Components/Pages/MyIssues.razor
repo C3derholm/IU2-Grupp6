@@ -1,0 +1,108 @@
+@page "/my-issues"
+@rendermode InteractiveServer
+
+@using IU2.Core.Models
+@inject IU2.Core.Services.IIssueService IssueService
+@implements IDisposable
+
+<h3>Mina felanmälningar</h3>
+
+<div class="mb-3">
+    <label for="anvandare"><strong>Välj användare:</strong></label>
+
+    <select id="anvandare" class="form-select" @bind="valdAnvandare" @bind:after="LaddaArenden">
+        <option value="">-- Välj användare --</option>
+        @foreach (var namn in Anvandare)
+        {
+            <option value="@namn">@namn</option>
+        }
+    </select>
+</div>
+
+@if (string.IsNullOrEmpty(valdAnvandare))
+{
+    <p>Välj en användare för att se dina ärenden.</p>
+}
+else if (issues == null)
+{
+    <p>Laddar...</p>
+}
+else if (issues.Count == 0)
+{
+    <p>Du har inga inskickade felanmälningar.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ärendenummer</th>
+                <th>Rubrik</th>
+                <th>Status</th>
+                <th>Skapad</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var issue in issues)
+            {
+                <tr>
+                    <td>@issue.Id</td>
+                    <td>@issue.Title</td>
+                    <td>@issue.Status.TillSvenska()</td>
+                    <td>@issue.CreatedAt</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    private string valdAnvandare = string.Empty;
+    private List<Issue>? issues;
+
+    // Samma användare som i dropdownen på /create-issue
+    private readonly List<string> Anvandare = new()
+      {
+          "Anna Andersson",
+          "Bob Bergström",
+          "Clara Carlsson",
+          "David Davidsson",
+          "Eva Eriksson"
+      };
+
+    private async Task LaddaArenden()
+    {
+        if (string.IsNullOrEmpty(valdAnvandare))
+        {
+            issues = null;
+            return;
+        }
+
+        issues = await IssueService.GetByUsernameAsync(valdAnvandare);
+    }
+
+    private readonly PeriodicTimer timer = new(TimeSpan.FromSeconds(10));
+
+    protected override void OnInitialized()
+    {
+        _ = UppdateraRegelbundet();
+    }
+
+    private async Task UppdateraRegelbundet()
+    {
+        while (await timer.WaitForNextTickAsync())
+        {
+            await InvokeAsync(async () =>
+            {
+                await LaddaArenden();
+                StateHasChanged();
+            });
+        }
+    }
+
+    public void Dispose()
+    {
+        timer.Dispose();
+    }
+}

@@ -17,33 +17,45 @@
 
             <div style="margin-bottom: 20px;">
                 <label for="title" style="display: block; font-weight: 600; color: #333; margin-bottom: 8px; font-size: 14px;">Titel *</label>
-                <InputText id="title" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s;" @bind-Value="newIssue.Title" placeholder="Ex. Login fungerar inte..." />
-                <ValidationMessage For="@(() => newIssue.Title)" style="display: block; color: #e74c3c; font-size: 13px; margin-top: 4px;" />
+                <InputText id="title" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px;" @bind-Value="newIssue.Title" placeholder="Ex. Login fungerar inte..." />
+                <ValidationMessage For="@(() => newIssue.Title)" style="color: #e74c3c; font-size: 13px;" />
             </div>
 
             <div style="margin-bottom: 20px;">
                 <label for="category" style="display: block; font-weight: 600; color: #333; margin-bottom: 8px; font-size: 14px;">Kategori *</label>
-                <InputSelect id="category" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s;" @bind-Value="newIssue.Category">
+                <InputSelect id="category" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px;" @bind-Value="newIssue.Category">
                     <option value="">-- Välj kategori --</option>
                     @foreach (var category in Categories)
                     {
                         <option value="@category">@category</option>
                     }
                 </InputSelect>
-                <ValidationMessage For="@(() => newIssue.Category)" style="display: block; color: #e74c3c; font-size: 13px; margin-top: 4px;" />
+                <ValidationMessage For="@(() => newIssue.Category)" style="color: #e74c3c; font-size: 13px;" />
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label for="assignee" style="display: block; font-weight: 600; color: #333; margin-bottom: 8px; font-size: 14px;">Användare *</label>
+                <InputSelect id="assignee" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px;" @bind-Value="newIssue.Username">
+                    <option value="">-- Välj användare --</option>
+                    @foreach (var user in MockUsers)
+                    {
+                        <option value="@user.Name">@user.Name (@user.Email)</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => newIssue.Username)" style="color: #e74c3c; font-size: 13px;" />
             </div>
 
             <div style="margin-bottom: 28px;">
                 <label for="description" style="display: block; font-weight: 600; color: #333; margin-bottom: 8px; font-size: 14px;">Beskrivning *</label>
-                <InputTextArea id="description" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 120px; transition: border-color 0.3s;" @bind-Value="newIssue.Description" placeholder="Beskiv problemet eller önskemålet i detalj..." rows="4" />
-                <ValidationMessage For="@(() => newIssue.Description)" style="display: block; color: #e74c3c; font-size: 13px; margin-top: 4px;" />
+                <InputTextArea id="description" style="width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; min-height: 120px;" @bind-Value="newIssue.Description" placeholder="Beskiv problemet eller önskemålet i detalj..." rows="4" />
+                <ValidationMessage For="@(() => newIssue.Description)" style="color: #e74c3c; font-size: 13px;" />
             </div>
 
             <div style="display: flex; gap: 12px;">
-                <button type="submit" style="flex: 1; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 20px rgba(102, 126, 234, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <button type="submit" style="flex: 1; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
                     ✓ Skapa Issue
                 </button>
-                <a href="/issues" style="padding: 12px 24px; background: #f0f0f0; color: #333; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; border: none; transition: background 0.2s; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.background='#e0e0e0'" onmouseout="this.style.background='#f0f0f0'">
+                <a href="/issues" style="padding: 12px 24px; background: #f0f0f0; color: #333; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center;">
                     ← Tillbaka
                 </a>
             </div>
@@ -51,24 +63,22 @@
 
         @if (!string.IsNullOrEmpty(successMessage))
         {
-            <div style="margin-top: 20px; padding: 16px; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 8px; font-size: 14px; display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 20px;">✓</span>
-                @successMessage
+            <div style="margin-top: 20px; padding: 16px; background: #d4edda; color: #155724; border-radius: 8px;">
+                ✓ @successMessage
             </div>
         }
 
         @if (!string.IsNullOrEmpty(errorMessage))
         {
-            <div style="margin-top: 20px; padding: 16px; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 8px; font-size: 14px; display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 20px;">✕</span>
-                @errorMessage
+            <div style="margin-top: 20px; padding: 16px; background: #f8d7da; color: #721c24; border-radius: 8px;">
+                ✕ @errorMessage
             </div>
         }
     </div>
 </div>
 
 @code {
-    private IssueCreateModel newIssue = new();
+    private Issue newIssue = new();
     private string successMessage = string.Empty;
     private string errorMessage = string.Empty;
 
@@ -81,6 +91,15 @@
         "Question"
     };
 
+    private readonly List<MockUser> MockUsers = new()
+    {
+        new MockUser { Id = "1", Name = "Anna Andersson", Email = "anna@example.com" },
+        new MockUser { Id = "2", Name = "Bob Bergström", Email = "bob@example.com" },
+        new MockUser { Id = "3", Name = "Clara Carlsson", Email = "clara@example.com" },
+        new MockUser { Id = "4", Name = "David Davidsson", Email = "david@example.com" },
+        new MockUser { Id = "5", Name = "Eva Eriksson", Email = "eva@example.com" }
+    };
+
     private async Task HandleSubmit()
     {
         try
@@ -89,7 +108,8 @@
             {
                 Title = newIssue.Title,
                 Description = newIssue.Description,
-                Category = Enum.Parse<IssueCategory>(newIssue.Category)
+                Category = newIssue.Category,
+                Username = newIssue.Username
             };
 
             await IssueService.CreateAsync(issue);
@@ -105,11 +125,12 @@
         }
     }
 
-    private class IssueCreateModel
+
+
+    private class MockUser
     {
-        public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public string Category { get; set; } = string.Empty;
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
     }
 }
-
