@@ -55,8 +55,7 @@
   | Ingen inloggning – vem som helst kan välja vilken användare som helst och se dennes ärenden, och nå supportsidorna |Hög | `CreateIssue.razor`, `MyIssues.razor`, `Support.razor` |
   | `CompletedAt` nollställs inte när ett löst ärende öppnas igen | Låg | `IssueService.UpdateStatusAsync` |
   | Användarlistan finns på två ställen | Låg | `CreateIssue.razor`, `MyIssues.razor` |
-  | Kategorierna (Bug, Feature …) passar ett utvecklingsprojekt snarare än IT-support | Låg | `Issue.cs`
-  (`IssueCategory`) |
+  
 
   ## Vad ett mottagande team bör ta först
 
