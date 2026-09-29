@@ -45,6 +45,17 @@ public class IssueService : IIssueService
         if (issue is null) return false;
 
         issue.Status = status;
+
+        // Set CompletedAt when status changes to Done
+        if (status == IssueStatus.Done)
+        {
+            issue.CompletedAt = DateTime.UtcNow;
+        }
+        // Optionally, clear CompletedAt if status changes away from Done
+        else if (issue.Status == IssueStatus.Done)
+        {
+            issue.CompletedAt = null;
+        }
         await db.SaveChangesAsync();
         return true;
     }

@@ -18,6 +18,13 @@ builder.Services.AddSingleton<IClock, SystemClock>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
+    await using var db = await factory.CreateDbContextAsync();
+    await db.Database.MigrateAsync();
+}
+
 app.UseStaticFiles();
 app.UseAntiforgery();
 
