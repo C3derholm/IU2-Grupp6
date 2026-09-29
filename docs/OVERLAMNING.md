@@ -20,7 +20,7 @@ Byggt i Blazor (.NET 10) med SQLite som databas.
 
 | Namn | Ansvar | Kontakt |
 |---|---|---|
-| Andreas Cederholm | Story 7 (kategorisering), Story 8 (mina ärenden), statusändring | <...> |
+| Andreas | Story 7 (kategorisering), Story 8 (mina ärenden), statusändring | <...> |
 | Anna | Skapa felanmälan, användardropdown | <...> |
 | Luka | Projektskelett, databas, Username, kategoriöversikt (US9) | <...> |
 | Pierre | CompletedAt, automatisk migrering, startsida och meny | <...> |
@@ -53,18 +53,15 @@ Förutsättningar:
 | Vad | Hur allvarligt | Var i koden |
 |---|---|---|
 | Ingen inloggning – vem som helst kan välja vilken användare som helst och se dennes ärenden, och nå supportsidorna | Hög | `CreateIssue.razor`, `MyIssues.razor`, `Support.razor` |
-| Säkerhetssårbarhet i paketet `SQLitePCLRaw.lib.e_sqlite3` 2.1.11 (följer med EF Core 10.0.0) | Hög | `src/IU2.Core/IU2.Core.csproj` |
-| Inga egna enhetstester – bara mallens två röktester | Medel | `tests/IU2.Core.Tests` |
 | `CompletedAt` nollställs inte när ett löst ärende öppnas igen | Låg | `IssueService.UpdateStatusAsync` |
 | Användarlistan finns på två ställen | Låg | `CreateIssue.razor`, `MyIssues.razor` |
-| Knappen "← Tillbaka" på skapa-sidan leder till `/issues` som inte finns | Låg | `CreateIssue.razor` |
 | Kategorierna (Bug, Feature …) passar ett utvecklingsprojekt snarare än IT-support | Låg | `Issue.cs` (`IssueCategory`) |
 
 ## Vad ett mottagande team bör ta först
 
 1. Uppdatera EF Core-paketen (10.0.0 → senaste 10.0.x) så att säkerhetsvarningen försvinner.
 2. Inför inloggning med roller (användare / support), så att användare bara når sina egna ärenden.
-3. Skriv enhetstester för `IssueService`.
+
 
 ## Vad vi skulle göra om vi fick en vecka till
 
@@ -72,4 +69,4 @@ Förutsättningar:
 - Filtrering och sortering på kategori och status i supportlistan
 - Kategorier anpassade för IT-support (Hårdvara, Mjukvara, Behörighet, Nätverk)
 - Push-notiser istället för att listan hämtas var 10:e sekund
-- Tester för all logik i `IssueService`
+
