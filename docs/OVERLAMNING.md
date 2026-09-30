@@ -59,7 +59,7 @@
 
   ## Vad ett mottagande team bör ta först
 
-  1. Uppdatera EF Core-paketen (10.0.0 → senaste 10.0.x) så att säkerhetsvarningen försvinner.
+  1. Uppdatera EF Core-paketen (10.0.0 → senaste 10.0.x) så att senaste säkerhetsfixar implementeras.
   2. Inför inloggning med roller (användare / support), så att användare bara når sina egna ärenden.
 
   ## Vad vi skulle göra om vi fick en vecka till
@@ -67,4 +67,5 @@
   - Inloggning och roller
   - Filtrering och sortering på kategori och status i supportlistan
   - Push-notiser istället för att listan hämtas var 10:e sekund
+  - Snygga till frontend för bättre user experience. 
   
